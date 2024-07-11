@@ -1,0 +1,44 @@
+* Requirements
+
+  The GeoTIFF interface requires =libgdal 3.8.4= or later.  There are many ways
+  to install this on your system, I use macports (=port install gdal=).
+
+  To install this package, from this directory, run
+  #+begin_src shell
+    pip install -e .
+  #+end_src
+
+  If you use Conda, then do this:
+  #+begin_src shell
+    conda create --name NEW-ENV python=<version no.>
+    conda activate NEW-ENV
+    conda install gdal
+
+    cd <OilClassification>
+    pip install -e .
+  #+end_src
+
+  =jupyter-notebook= generates a lot of text output to STDOUT, so I usually run
+  it inside a =screen= session, but that is not necessary.
+
+* Input/output formats
+
+  Presently, this code can handle ENVI, GeoTIFF, and NetCDF formats on the input
+  side.  The output can either be the same format or ENVI.  No protection is
+  written for invalid output formats -- the code will just crash.
+
+  | input \ ouput-> | ENVI | GeoTIFF | NetCDF |
+  |-----------------+------+---------+--------|
+  | ENVI            | Y    | N       | N      |
+  | GeoTIFF         | Y    | Y       | N      |
+  | NetCDF          | Y    | N       | Y      |
+
+  For GeoTIFF data, the channels must be arranged as:
+
+    0. $\sigma$
+
+    1. incidence angle (with units specified in the ~config.yaml~ file)
+
+    2. latitude
+
+    3. longitude

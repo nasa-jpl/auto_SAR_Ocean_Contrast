@@ -1,0 +1,26 @@
+# Configuration file for auto_calc_contrast_in_ocean python code
+
+input:
+  format     : geotiff
+  infiles    : '1_S1A_*_msk.tif' #input file glob or filename
+
+  indeg      : True
+  indb       : False
+
+  uselandmask   : False # 0 = water, 1 = land/notwater
+
+process: # Clean sea pixel ID processing options
+  incangbinsize : 1            # [deg] For incidence angle binning to get clean
+                               # sea pixels from the PDF of the values in
+                               # infiles
+  setinclolim   : False
+  setinchilim   : False
+  inclolim      : 30           # [deg]
+  inchilim      : 58           # [deg]
+  bootstrap     : False        # Use solution from last angle bin for current bin
+
+  polarization  : VV
+
+output:
+  format  : geotiff
+  outdir  : f'pyDR_{infile}'

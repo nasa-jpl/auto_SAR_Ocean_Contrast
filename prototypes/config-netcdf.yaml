@@ -1,0 +1,129 @@
+# Configuration file for auto_calc_contrast_in_ocean python code
+
+input:
+  format     : netcdf
+  infiles    : 'Input/*.nc'
+
+  indeg      : True
+  indb       : False
+
+  # for netcdf, mask is part of file, so the external landmask is not used.
+  uselandmask   : False        # 0 = water, 1 = land/notwater
+
+process: # Clean sea pixel ID processing options
+  incangbinsize : 1            # [deg] For incidence angle binning to get clean
+                               # sea pixels from the PDF of the values in
+                               # infiles
+  setinclolim   : False
+  setinchilim   : False
+  inclolim      : 30           # [deg]
+  inchilim      : 58           # [deg]
+  bootstrap     : False        # Use solution from last angle bin for current bin
+
+output:
+  format   : netcdf
+  outdir   : pyDR
+  global_attr:
+    title : "Contrast Ratio"
+    summary: "NRCS Contrast Ratio"
+  rm_attr:
+    - acquisition_date
+    - acquisition_time
+    - answrs_note
+    - calibration_flag
+    - contributor_name
+    - contributor_role
+    - cpol_remove_noise
+    - datum_scale
+    - datum_shifts_m
+    - deg_sigma_ne_fit
+    - flag_sar_band_polarization
+    - flip_flag
+    - illumination_dir_deg
+    - image_pixel_value_units
+    - integration_time_s
+    - jsbegin
+    - jsend
+    - level_2_create_date_time
+    - map_descriptor
+    - orbit_number
+    - polarization
+    - processing_agency
+    - processing_facility
+    - processing_start
+    - range_type
+    - receiver_gain_db
+    - ref_corner_line
+    - ref_corner_pixel
+    - ref_ellipsoid
+    - ref_line_incr
+    - ref_pixel_incr
+    - reference
+    - relative_processor_gain_db
+    - sar_platform_code
+    - scene_identifier
+    - scene_reference_number
+    - sensor_vel_rel_ground_mps
+    - source_lonlat_fit
+    - source_sigma_ne_fit
+    - xpol_remove_noise
+  vars:
+#   - x
+#   - y
+    - scaling
+    - pixel_spacing_m
+    - line_spacing_m
+    - heading_north_deg
+    - heading_image_deg
+    - range_swath_width_m
+    - azimuth_swath_width_m
+    - incid_angle_center_deg
+    - lines_sio_image
+    - pixels_sio_image
+    - lines_original_image
+    - pixels_original_image
+#   - nx
+#   - ny
+    - looks_range
+    - looks_azimuth
+    - ref_semi_major_axis_m
+    - ref_semi_minor_axis_m
+    - basis_lon_fit
+    - deg_lonlat_fit
+    - deg_incid_fit
+    - deg_rlook_fit
+    - coord_ref
+#   - northernmost_latitude
+#   - southernmost_latitude
+#   - easternmost_longitude
+#   - westernmost_longitude
+    - sigma
+#   - sigma2
+#   - coil
+#   - clowwind
+    - mask
+#   - contrast_ratio
+#   - cumulative
+#   - thickness_class
+    - longitude
+    - latitude
+    - incid
+    - rlook
+    - lon_coef
+    - lon_xexp
+    - lon_yexp
+    - lat_coef
+    - lat_xexp
+    - lat_yexp
+    - i_coef
+    - i_xexp
+    - i_yexp
+    - j_coef
+    - j_xexp
+    - j_yexp
+    - incid_coef
+    - incid_xexp
+    - incid_yexp
+    - rlook_coef
+    - rlook_xexp
+    - rlook_yexp
