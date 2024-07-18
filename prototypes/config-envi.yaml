@@ -14,21 +14,16 @@ process: # Clean sea pixel ID processing options
   incangbinsize : 2            # For incidence angle binning to get clean sea pixels from the PDF of the values in infiles
   setinclolim   : True
   setinchilim   : True
-  inclolim      : 40           # 25; % 33.; %
-  inchilim      : 58           # 60; % 62;
+  inclolim      : 40
+  inchilim      : 58
   bootstrap     : True         # Use solution from last angle bin for current bin
 
   # For each infile line/flight/DT, calculate contrasts for the following
   # files (contrast = Value at same incang in clean sea / Value)
-  filetype : # [glob, insuffx, outsuffix] access as [0], [1] or [2]
+  filetype :
     - 'VVVV*.grd'
     - 'HHHH*.grd'
     - 'HVHV*.grd'
-    - 'PD.grd'
-    - 'Rcopol.grd'
-    - 'Rxpol*.grd'
-    - 'Itot.grd'
-    - 'VVovrHH.grd'
   exclude :
     - 'dB'
 
