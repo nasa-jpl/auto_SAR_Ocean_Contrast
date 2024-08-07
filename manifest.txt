@@ -1,5 +1,7 @@
+LICENSE.txt
 OilClassification
 OilClassification/__init__.py
+OilClassification/about.py
 OilClassification/io.py
 OilClassification/pkl.py
 OilClassification/util.py
@@ -9,6 +11,7 @@ docs/algorithm.md
 docs/algorithm_schematic.png
 docs/install.md
 docs/instructions.md
+install
 jupyter
 jupyter/auto_calc_contrast_in_ocean_all_formats.ipynb
 prototypes

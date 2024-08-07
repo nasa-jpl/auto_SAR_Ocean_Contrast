@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+MIN_PY_VER=3.8
+ENVNAME=$1
+PYVERSION=$2
+
+if [[ $CONDA_DEFAULT_ENV = "" ]]; then
+    echo This script is for miniconda or anaconda installations.
+    echo
+    echo If you are not using Conda, then all you need to do are:
+    echo \ \ 1. Make sure your gdal is up-to-date.
+    echo \ \ 2. Run \`pip install -e .\` from this directory.
+    echo
+    echo Your current configuration is:
+    python OilClassification/about.py
+    exit
+fi
+
+## deactivate if we are not already in the base env
+# either way, we need to source "conda.sh" for activate/deactivate
+# see https://stackoverflow.com/questions/55507519/python-activate-conda-env-through-shell-script
+if [[ $CONDA_DEFAULT_ENV != "base" ]]; then
+    source $CONDA_PREFIX_1/etc/profile.d/conda.sh
+    while [[ $CONDA_SHLVL > 1 ]]; do
+        conda deactivate
+    done
+else
+    source $CONDA_PREFIX/etc/profile.d/conda.sh
+fi
+
+## print usage and exit if ENVNAME is not specified
+if [[ $BASH_ARGC < 1 ]]; then
+    echo usage: ./install ENVNAME [PYTHONVERSION]
+    exit
+fi
+
+## install with default python or version specified by user
+if [[ $BASH_ARGC < 2 ]]; then
+    echo creating new environment $ENVNAME with default python
+    conda create --name $ENVNAME --yes
+else
+    if [[ $PYVERSION < $MIN_PY_VER ]]; then
+        echo Oldest support python version is $MIN_PY_VER
+        exit
+    fi
+    echo creating new environment $ENVNAME with python $PYVERSION
+    conda create --name $ENVNAME python=$PYVERSION --yes
+fi
+
+
+#source $CONDA_PREFIX/etc/profile.d/conda.sh
+conda activate $ENVNAME
+if [[ $ENVNAME == $CONDA_DEFAULT_ENV ]]; then
+    conda install gdal --yes
+    pip install -e .
+    python OilClassification/about.py
+else
+    echo failed to activate $ENVNAME
+fi
