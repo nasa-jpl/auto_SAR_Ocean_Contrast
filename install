@@ -54,6 +54,8 @@ if [[ $ENVNAME == $CONDA_DEFAULT_ENV ]]; then
     conda install gdal --yes
     pip install -e .
     python OilClassification/about.py
+    echo To use this new environment run:
+    echo    $ conda activate $ENVNAME
 else
     echo failed to activate $ENVNAME
 fi

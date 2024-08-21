@@ -22,7 +22,7 @@ process: # Clean sea pixel ID processing options
 
 output:
   format   : netcdf
-  outdir   : pyDR
+  outdir   : Output
   global_attr:
     title : "Contrast Ratio"
     summary: "NRCS Contrast Ratio"

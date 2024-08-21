@@ -2,7 +2,7 @@
 
 input:
   format       : envi
-  infiles      : '*Itot.dB.grd' #input file glob
+  infiles      : 'Input/*Itot.dB.grd' #input file glob
 
   incangsuffix : .inc
   indeg        : False
@@ -29,4 +29,4 @@ process: # Clean sea pixel ID processing options
 
 output:
   format  : envi
-  outdir  : ./pyauto/
+  outdir  : Output

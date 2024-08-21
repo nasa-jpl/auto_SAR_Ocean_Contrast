@@ -77,9 +77,9 @@ for thisfile in filelist[args.initial:args.final]:
         product = None
 
     try: # cfgOut['outdir'] might be a python statement or a string
-        outdir  = path.join(wd, eval(cfgOut['outdir']))
+        outdir  = path.join(wd, eval(cfgOut['outdir']),'ContrastRatio')
     except:
-        outdir  = path.join(wd, cfgOut['outdir'])
+        outdir  = path.join(wd, cfgOut['outdir'],'ContrastRatio')
     makedirs(outdir, exist_ok=True)
 
     if DataFormat == 'ENVI':

@@ -4,21 +4,12 @@
 
 ## 1. Requirements
 The GeoTIFF interface requires *libgdal 3.8.4* or later.  There are many ways 
-to install this on your system, e.g., macports (*port install gdal*).
+to install this on your system, e.g., macports (*port install gdal*).  This should happen automatically when following the instructions below.
 
-## 2. Installation without using Conda environments)
+## 2. Installation 
 
-To install the libraries for this package, after 'git pull ...', run this from the OilClassification directory:
+./install [NewCondaEnvironmentName] [PythonVersion] 
+
+If NewCondaEnvironmentName is specified, a new Conda environment is created and installation occurs there.  Otherwise, installation instructions for installing in the base environment are printed out.  
   
-    pip install -e . 
-
-## 3. Installation in new conda environment
-
-If you use conda, then do this:
-  
-    conda create --name NEW-ENV python=<version no.>
-    conda activate NEW-ENV
-    conda install gdal
-    cd <OilClassification>
-    pip install -e .
-
+The code works with python 3.8 and possibly later versions depending upon the processor on your computer.  Note: The code was tested on an M1 Mac and worked with python 3.9.

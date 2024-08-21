@@ -2,7 +2,7 @@
 
 input:
   format     : geotiff
-  infiles    : '1_S1A_*_msk.tif' #input file glob or filename
+  infiles    : 'Input/1_S1A_*_msk.tif' #input file glob or filename
 
   indeg      : True
   indb       : False
@@ -23,4 +23,4 @@ process: # Clean sea pixel ID processing options
 
 output:
   format  : geotiff
-  outdir  : f'pyDR_{infile}'
+  outdir  : Output

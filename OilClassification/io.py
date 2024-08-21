@@ -3,11 +3,11 @@ from os import path, makedirs
 from os.path import abspath, basename
 from netCDF4 import Dataset
 from osgeo import gdal
-import spectral
+import spectral, re
 
 __all__ = ['get_most_recent_git_tag',
            'parse_prodname_UAVSAR',
-           'writedata']
+           'writedata', 'writemrf']
 
 import subprocess
 def get_most_recent_git_tag():
@@ -181,6 +181,54 @@ def writedata(datadict, infile, outdir, cfg):
                                      datadict[key]['data'],
                                      force      = True,
                                      dtype      = np.float32,
+                                     ext        = None,
+                                     interleave = cfg['interleave'],
+                                     metadata   = cfg['metadata'])
+
+
+def writemrf(datadict, infile, outdir, cfg):
+    """Write MRF data to file.  Supports ENVI, nc and geotiff will come later."""
+    ID     = cfg['ID']
+    format = cfg['format'].upper()
+
+    if format == 'NETCDF':
+        print("Not yet implemented.")
+        pass
+
+    elif format == 'GEOTIFF':
+
+        # get metadata from input file
+        ds           = gdal.Open(infile)
+        GeoTransform = ds.GetGeoTransform()
+        Projection   = ds.GetProjection()
+        ds           = None
+
+        driver = gdal.GetDriverByName("GTiff")
+
+        for key in datadict:
+            outfile = abspath(path.join(outdir, f'{infile_basename}_{ID}_{key}.tif'))
+            rows, cols = datadict[key]['data'].shape
+
+            outarr = datadict[key]['data'].data.copy()
+            outarr[datadict[key]['data'].mask] = np.nan
+
+            outdata = driver.Create(outfile, cols, rows, 1, gdal.GDT_Float32)
+            outdata.SetGeoTransform(GeoTransform)          ##sets same geotransform as input
+            outdata.SetProjection(Projection)              ##sets same projection as input
+
+            outdata.GetRasterBand(1).WriteArray(outarr)
+            outdata.FlushCache()                           ##saves to disk
+            outdata = None
+
+    elif format == 'ENVI' or True:
+        (infile_basename, tail) = re.split('_JPL[\d.]+', basename(infile))
+        sfx = tail.split('.')[1]
+        for key in datadict:
+            outfile = abspath(path.join(outdir, f'{infile_basename}_{ID}_{key}.{sfx}'))
+            spectral.envi.save_image(outfile + '.hdr',
+                                     datadict[key]['data'],
+                                     force      = True,
+                                     dtype      = np.uint8,
                                      ext        = None,
                                      interleave = cfg['interleave'],
                                      metadata   = cfg['metadata'])
