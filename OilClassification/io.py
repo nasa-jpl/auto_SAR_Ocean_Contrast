@@ -192,7 +192,7 @@ def writemrf(datadict, infile, outdir, cfg):
     format = cfg['format'].upper()
 
     if format == 'NETCDF':
-        print("Not yet implemented.")
+        print("netCDF output not yet implemented.")
         pass
 
     elif format == 'GEOTIFF':

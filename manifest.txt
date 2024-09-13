@@ -21,3 +21,4 @@ prototypes/config-geotiff-unmasked.yaml
 prototypes/config-netcdf.yaml
 readme.md
 setup.py
+CITATION.cff

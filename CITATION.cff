@@ -1,0 +1,38 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  Autonomous Ocean Contrast Estimation for SAR Images
+  (auto_SAR_Ocean_Contrast)
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Peter
+    family-names: Mao
+    email: peter.mao@jpl.nasa.gov
+    affiliation: >-
+      Jet Propulsion Laboratory, California Institute of
+      Technology
+    orcid: 'https://orcid.org/0009-0002-5543-153X'
+  - given-names: Cathleen E.
+    family-names: Jones
+    affiliation: >-
+      Jet Propulsion Laboratory, California Institute of
+      Technology
+    email: cathleen.e.jones@jpl.nasa.gov
+    orcid: 'https://orcid.org/0000-0002-2739-1545'
+identifiers:
+  - type: doi
+    value: 10.48588/h6h7-8y85
+    description: 'GitHub repository, auto_SAR_Ocean_Contrast'
+abstract: >-
+  A Python module for estimating the contrast in a SAR image
+  of the ocean surface.
+keywords:
+  - ocean contrast
+  - damping ratio
+  - oil slick
+license: Apache-2.0
