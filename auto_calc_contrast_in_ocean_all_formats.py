@@ -51,7 +51,7 @@ else:
     angLabel = 'rad'
 
 if DEBUG:
-    makedirs('./figs') # DEBUG needs a place to dump figures
+    makedirs('./figs', exist_ok=True) # DEBUG needs a place to dump figures
 
 filelist = np.sort(glob(path.join(wd, cfgIn['infiles'])))
 inputDir = path.dirname(filelist[0])

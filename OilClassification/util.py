@@ -102,7 +102,7 @@ def id_pix_as_cleanwater(data, tgtval=None, edges=None, makefigs=False):
     peakfrac  =  0.5
     closelim  =  0.25 # selected binval must be within this fraction of the full range of TGTVAL
     minDeltaSigma = max(round(0.5/binwidth), 1)  # [bins] = [sigma]/[binwidth]
-    minProminence = 0.01 # probability density
+    minProminence = 0.001 #0.01 # probability density - Tune this to find peaks
     closeTol  = None # defined if bootstrapping happens
 
     nbins = len(prob)
@@ -118,7 +118,6 @@ def id_pix_as_cleanwater(data, tgtval=None, edges=None, makefigs=False):
     prominences, _leftbase, _rightbase = signal.peak_prominences(sprob, peakidx)
     _promNorm  = prominences/(max(sprob) - min(sprob))
     sigmaPeaks = sigma[peakidx]
-
 
     if makefigs:
         figure()

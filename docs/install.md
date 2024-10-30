@@ -8,6 +8,8 @@ to install this on your system, e.g., macports (*port install gdal*).  This shou
 
 ## 2. Installation 
 
+git clone https://github.com/nasa-jpl/auto_SAR_Ocean_Contrast.git
+cd auto_SAR_Ocean_Contrast
 ./install [NewCondaEnvironmentName] [PythonVersion] 
 
 If NewCondaEnvironmentName is specified, a new Conda environment is created and installation occurs there.  Otherwise, installation instructions for installing in the base environment are printed out.  
