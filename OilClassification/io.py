@@ -190,6 +190,7 @@ def writemrf(datadict, infile, outdir, cfg):
     """Write MRF data to file.  Supports ENVI, nc and geotiff will come later."""
     ID     = cfg['ID']
     format = cfg['format'].upper()
+    makedirs(outdir, exist_ok=True)
 
     if format == 'NETCDF':
         print("netCDF output not yet implemented.")

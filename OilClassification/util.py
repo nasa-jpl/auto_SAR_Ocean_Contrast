@@ -102,7 +102,7 @@ def id_pix_as_cleanwater(data, tgtval=None, edges=None, makefigs=False):
     peakfrac  =  0.5
     closelim  =  0.25 # selected binval must be within this fraction of the full range of TGTVAL
     minDeltaSigma = max(round(0.5/binwidth), 1)  # [bins] = [sigma]/[binwidth]
-    minProminence = 0.001 #0.01 # probability density - Tune this to find peaks
+    minProminence = 1.5 # multiplier on STDEV(unsmooth - smooth) histogram
     closeTol  = None # defined if bootstrapping happens
 
     nbins = len(prob)
@@ -112,17 +112,25 @@ def id_pix_as_cleanwater(data, tgtval=None, edges=None, makefigs=False):
     boxlen = min(round(len(prob)/10), maxsmooth)
     sprob = smooth(prob, boxlen)
 
+    # "noisiness" of the AOI histogram.  The numerator gives the stdev of the
+    # probability histogram around the smoothed version of the same histogram.
+    # The denominator is an attempt characterize the noise in the smoothed
+    # histogram with the expectation that noise in the smoothed histogram will
+    # scale by 1/sqrt(#pts-1)
+    noise = np.std(prob - sprob) / np.sqrt(maxsmooth - 1)
+
     peakidx , _properties = signal.find_peaks(sprob,
                                               distance=minDeltaSigma,
-                                              prominence=minProminence)
+                                              prominence=minProminence * noise)
     prominences, _leftbase, _rightbase = signal.peak_prominences(sprob, peakidx)
     _promNorm  = prominences/(max(sprob) - min(sprob))
     sigmaPeaks = sigma[peakidx]
 
     if makefigs:
+        print(f'Noise normalized prominences {prominences/noise}')
         figure()
-        plot(sigma, sprob)
-        plot(sigma, prob, '.', markersize=2, alpha=.5)
+        plot(sigma, sprob, label='smoothed hist counts')
+        plot(sigma, prob, '.', markersize=2, alpha=.5, label='raw hist counts')
         xlabel('$\sigma$ [dB]')
         ylabel('probability density')
         plot(sigma[peakidx], sprob[peakidx], 'r*', label="candidates")
@@ -301,19 +309,20 @@ def dumb_sigma(data, ratio=None, nsig=None):
         return xx[ithreshold]
 
 def ma_expand(ma, dist=1):
-    """Expand the valid segments of a masked array (MA) by DIST."""
+    """Expand (dilate) the valid segments of a masked array (MA) by Euclidean distance DIST."""
     from skimage import segmentation as seg
 
     data = ma.data.copy()
     mask = ma.mask.copy()
 
-    dmin = np.amin(data[~mask])
-    data += 1 - dmin # offset data above zero by 1
-    data[mask] = 0   # set masked values to zero for expansion into these positions
+    if not mask.all():
+        dmin = np.amin(data[~mask])
+        data += 1 - dmin # offset data above zero by 1
+        data[mask] = 0   # set masked values to zero for expansion into these positions
 
-    data = seg.expand_labels(data, dist)
-    mask[data > 0] = False # update the mask
-    data += dmin - 1 # reset data values
+        data = seg.expand_labels(data, dist)
+        mask[data > 0] = False # update the mask
+        data += dmin - 1 # reset data values
 
     return np.ma.array(data, mask=mask)
 

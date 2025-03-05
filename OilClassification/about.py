@@ -55,27 +55,26 @@ def about():
     try:
         this_path = '~' / this_install_path.relative_to(home)
     except ValueError:
-        this_path = this_install_path
+        this_path = os.path.abspath(this_install_path)
 
     python_install_path = Path(sys.executable).parent
     try:
         py_path = '~' / python_install_path.relative_to(home)
     except ValueError:
-        py_path = python_install_path
+        py_path = os.path.abspath(python_install_path)
 
-    header = """
+    print("""
       auto_SAR_Ocean_Contrast
     ===========================
-    """
-    print(header)
+    """)
     print(f'Version:              {OilClassification.io.get_most_recent_git_tag():s}')
 
     print(f'Installation Path:    {this_path}')
-    dep_header = """
+
+    print("""
            Dependencies
     ===========================
-    """
-    print(dep_header)
+    """)
     print(f'gdal:                 {version("gdal"):s}')
     print(f'jupyter:              {version("jupyter"):s}')
     print(f'jupyterlab:           {version("jupyterlab"):s}')

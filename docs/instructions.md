@@ -44,7 +44,7 @@ A **config.yaml** file is used to describe input data and select processing opti
  - whether to set either upper or lower incidence angle limits and their values  
  - The incidence angle bin size \(*incangbinsize*\) is used to account for the NRCS dependence on incidence angle and usually can be set to 1-2 degrees.  The exception is if the total angular range is small (~<3 degrees) in which case smaller bin size must be used to have sufficient points for the fit.
  - a flag to specify whether an enternal land mask is to be applied and the landmask file name
- - The *bootstrap* option is for hard-to-ID areas and uses the previous bin's clean water NRCS to search for the current clean water peak.  
+ - The *bootstrap* option is for hard-to-ID areas and uses the previous bin's clean water NRCS to search for the current clean water peak.  USE WITH CAUTION: If the clean water peak is misidentified in the first bin, subsequent bins are also likely to have the wrong clean water peak. 
 
 FOR NETCDF: The config.yaml file for NetCDF input also contains a list of the variables in the input file that must be kept in the output file to match the NOAA CoastWatch format.
 

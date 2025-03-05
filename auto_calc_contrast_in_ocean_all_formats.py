@@ -27,10 +27,12 @@ if __name__ == '__main__':
     parser.add_argument('-i','--initial', default=0, help='Index of first file to process.')
     parser.add_argument('-f','--final', default=None, help='Index+1 of last file to process.')
     parser.add_argument('-d','--debug', action='store_true', help='Debug flag (verbose and intermediate figures).')
+    parser.add_argument('-I','--Interactive',action='store_true', help='Display figures (show rather than close)')
     args = parser.parse_args()
 
     wd    = args.casedir
     DEBUG = args.debug
+    Interactive = args.Interactive
 
 wd = path.expanduser(wd)
 with open(path.join(wd, 'config.yaml')) as fh:
@@ -119,8 +121,9 @@ for thisfile in filelist[args.initial:args.final]:
 
     if DEBUG:
         figure()
-        hist(nrcs_db[~nrcs_db.mask],np.linspace(-100,0,1000));
+        h=hist(nrcs_db[~nrcs_db.mask],np.linspace(-100,0,1001));
         yscale('log');
+        xlabel(f'normalized radar cross-section [dB]; bin size = {h[1][1] - h[1][0]:.2f}')
         savefig("./figs/plt-MIpksP.png")
 
     # mask out unphysically low values
@@ -157,7 +160,7 @@ for thisfile in filelist[args.initial:args.final]:
     angmaxb = angmax
     if cfgProc['setinchilim']:
         angmaxb = min(cfgProc['inchilim'], angmaxb)
-    nAngBins    = max(1, round(angmaxb - angminb))
+    nAngBins    = max(1, round((angmaxb - angminb)/cfgProc['incangbinsize']))
     angbinedges = np.linspace(angminb,angmaxb,nAngBins + 1)
     angbinedges = angbinedges.astype(np.double) / ang2deg
     # balance the bins to equalize populations
@@ -208,6 +211,8 @@ for thisfile in filelist[args.initial:args.final]:
             xlimits[0] = min(xlimits[0],xlim()[0])
             xlimits[1] = max(xlimits[1],xlim()[1])
             xlim(xlimits)
+            makedirs(abspath(path.join(outdir,'tmpfigs')), exist_ok=True)
+            savefig(abspath(path.join(outdir,'tmpfigs',f'{infile}_{versionLabel}_{angbinedges[ii]*ang2deg:.1f}.png')))
 
         cleanmask |= clean
         if nosolution[ii-1]:
@@ -330,6 +335,7 @@ for thisfile in filelist[args.initial:args.final]:
         colorbar(label=f'{cfgOut["ID"]} [dB]')
         title(file_basename)
         savefig(abspath(path.join(outdir, f'{file_basename}_{cfgOut["ID"]}_dB.png')))
+        show() if Interactive else close('all')
 
         # output format is specified by cfgOut['format'] \in {envi, geotiff, netcdf}
         datadict = {'contrast_ratio': {'data': dampratio,
@@ -337,4 +343,3 @@ for thisfile in filelist[args.initial:args.final]:
                     'cumulative'    : {'data': cumulative,
                                        'long_name': 'Cumulative distribution of the contrast ratio'}}
         io.writedata(datadict, fileToProcess, outdir, cfgOut)
-        show()
